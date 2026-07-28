@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { loginUser } from "../services/authService";
 
 function Login() {
 
@@ -8,15 +9,33 @@ function Login() {
 
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
 
-    console.log("Username :", username);
+    try {
 
-    console.log("Password :", password);
+        const response = await loginUser({
 
-    alert("Login Button Clicked");
+            username: username,
 
-  };
+            password: password
+
+        });
+
+        console.log(response.data);
+
+    } catch (error) {
+
+     console.error("Complete Error:", error);
+
+     console.error("Response:", error.response);
+
+     console.error("Data:", error.response?.data);
+
+        alert("Login Failed");
+
+    }
+
+};
 
   return (
 
