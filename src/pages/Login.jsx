@@ -23,6 +23,10 @@ function Login() {
 
         console.log(response.data);
 
+        localStorage.setItem("token", response.data.token);
+
+        alert("Login Successful");
+
     } catch (error) {
 
      console.error("Complete Error:", error);
