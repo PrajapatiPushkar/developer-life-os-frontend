@@ -1,20 +1,31 @@
+import Navbar from "../components/Navbar";
+import Sidebar from "../components/Sidebar";
+
 function Dashboard() {
 
     return (
 
-        <div className="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center">
+        <div className="bg-slate-950 min-h-screen">
 
-            <h1 className="text-5xl font-bold text-cyan-400">
+            <Navbar />
 
-                Welcome Pushkar 🚀
+            <div className="flex">
 
-            </h1>
+                <Sidebar />
 
-            <p className="mt-5 text-xl">
+                <div className="flex-1 p-8 text-white">
 
-                Developer-Life-OS Dashboard
+                    <h1 className="text-4xl font-bold">
+                        Welcome Pushkar 🚀
+                    </h1>
 
-            </p>
+                    <p className="mt-3 text-gray-400">
+                        This is your Developer-Life-OS Dashboard.
+                    </p>
+
+                </div>
+
+            </div>
 
         </div>
 
