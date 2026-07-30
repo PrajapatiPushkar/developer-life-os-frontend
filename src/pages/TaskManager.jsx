@@ -1,6 +1,20 @@
+import MainLayout from "../layouts/MainLayout";
+
 function TaskManager() {
 
-    return <h1 className="text-white text-4xl p-10">Task Manager</h1>;
+    return (
+
+        <MainLayout>
+
+            <h1 className="text-4xl font-bold">
+
+                Task Manager
+
+            </h1>
+
+        </MainLayout>
+
+    );
 
 }
 
