@@ -1,40 +1,66 @@
+import { NavLink } from "react-router-dom";
+
 function Sidebar() {
+
+    const menuItems = [
+
+        { name: "Dashboard", path: "/dashboard", icon: "🏠" },
+
+        { name: "Task Manager", path: "/tasks", icon: "📋" },
+
+        { name: "Daily Planner", path: "/planner", icon: "📅" },
+
+        { name: "Goal Tracker", path: "/goals", icon: "🎯" },
+
+        { name: "DSA Progress", path: "/dsa", icon: "📚" },
+
+        { name: "Internships", path: "/internships", icon: "💼" }
+
+    ];
 
     return (
 
-        <div className="w-64 bg-slate-900 text-white min-h-screen p-5">
+        <div className="w-64 bg-slate-900 min-h-screen text-white shadow-xl">
 
-            <h2 className="text-xl font-bold mb-6">
-                Menu
-            </h2>
+            <div className="p-6">
 
-            <ul className="space-y-4">
+                <h2 className="text-2xl font-bold text-cyan-400">
+                    Menu
+                </h2>
 
-                <li className="hover:text-cyan-400 cursor-pointer">
-                    🏠 Dashboard
-                </li>
+            </div>
 
-                <li className="hover:text-cyan-400 cursor-pointer">
-                    ✅ Task Manager
-                </li>
+            <nav className="mt-6">
 
-                <li className="hover:text-cyan-400 cursor-pointer">
-                    📅 Daily Planner
-                </li>
+                {menuItems.map((item) => (
 
-                <li className="hover:text-cyan-400 cursor-pointer">
-                    🎯 Goal Tracker
-                </li>
+                    <NavLink
+                        key={item.path}
+                        to={item.path}
+                        className={({ isActive }) =>
 
-                <li className="hover:text-cyan-400 cursor-pointer">
-                    📚 DSA Progress
-                </li>
+                            `flex items-center gap-3 px-6 py-4 transition
 
-                <li className="hover:text-cyan-400 cursor-pointer">
-                    💼 Internship Tracker
-                </li>
+                            ${isActive
 
-            </ul>
+                                ? "bg-cyan-500 text-white"
+
+                                : "hover:bg-slate-800"
+
+                            }`
+
+                        }
+                    >
+
+                        <span>{item.icon}</span>
+
+                        <span>{item.name}</span>
+
+                    </NavLink>
+
+                ))}
+
+            </nav>
 
         </div>
 

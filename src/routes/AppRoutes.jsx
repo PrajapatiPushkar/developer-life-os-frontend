@@ -5,45 +5,78 @@ import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
 import Home from "../pages/Home";
 import NotFound from "../pages/NotFound";
+import TaskManager from "../pages/TaskManager";
+import Planner from "../pages/Planner";
+import Goals from "../pages/Goals";
+import Dsa from "../pages/Dsa";
+import Internships from "../pages/Internships";
 
 function AppRoutes() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
 
-    return (
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
 
-        <BrowserRouter>
+        <Route
+          path="/tasks"
+          element={
+            <ProtectedRoute>
+              <TaskManager />
+            </ProtectedRoute>
+          }
+        />
 
-            <Routes>
+        <Route
+          path="/planner"
+          element={
+            <ProtectedRoute>
+              <Planner />
+            </ProtectedRoute>
+          }
+        />
 
-                <Route
-                    path="/"
-                    element={<Login />}
-                />
+        <Route
+          path="/goals"
+          element={
+            <ProtectedRoute>
+              <Goals />
+            </ProtectedRoute>
+          }
+        />
 
-                <Route
-                    path="/dashboard"
-                    element={
-                      <ProtectedRoute>
-                      <Dashboard />
-                      </ProtectedRoute>
-                    }
-                />
+        <Route
+          path="/dsa"
+          element={
+            <ProtectedRoute>
+              <Dsa />
+            </ProtectedRoute>
+          }
+        />
 
-                <Route
-                    path="/home"
-                    element={<Home />}
-                />
+        <Route
+          path="/internships"
+          element={
+            <ProtectedRoute>
+              <Internships />
+            </ProtectedRoute>
+          }
+        />
 
-                <Route
-                    path="*"
-                    element={<NotFound />}
-                />
+        <Route path="/home" element={<Home />} />
 
-            </Routes>
-
-        </BrowserRouter>
-
-    );
-
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default AppRoutes;
