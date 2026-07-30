@@ -1,7 +1,11 @@
 import MainLayout from "../layouts/MainLayout";
 import TaskCard from "../components/task/TaskCard";
+import { useState } from "react";
+import AddTaskModal from "../components/task/AddTaskModal";
 
 function TaskManager() {
+
+  const [showModal, setShowModal] = useState(false);
 
     const tasks = [
 
@@ -41,6 +45,9 @@ function TaskManager() {
                 </h1>
 
                 <button
+
+                    onClick={()=>setShowModal(true)}
+
                     className="bg-cyan-500 px-5 py-3 rounded-lg font-semibold"
                 >
 
@@ -79,6 +86,14 @@ function TaskManager() {
                 ))}
 
             </div>
+
+            <AddTaskModal
+
+            isOpen={showModal}
+
+            onClose={()=>setShowModal(false)}
+
+            />
 
         </MainLayout>
 
