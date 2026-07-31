@@ -1,98 +1,110 @@
+import { useEffect, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import TaskCard from "../components/task/TaskCard";
-import { useState } from "react";
 import AddTaskModal from "../components/task/AddTaskModal";
+import { getAllTasks } from "../services/taskService";
 
 function TaskManager() {
 
-  const [showModal, setShowModal] = useState(false);
+    const [tasks, setTasks] = useState([]);
+    const [showModal, setShowModal] = useState(false);
 
-    const tasks = [
+    // Load Tasks from Backend
+    const loadTasks = async () => {
 
-        {
-            id: 1,
-            title: "Learn Spring Boot",
-            priority: "HIGH",
-            status: "Pending"
-        },
+        try {
 
-        {
-            id: 2,
-            title: "Solve 2 DSA Questions",
-            priority: "MEDIUM",
-            status: "Completed"
-        },
+            const response = await getAllTasks();
 
-        {
-            id: 3,
-            title: "Apply Internship",
-            priority: "LOW",
-            status: "Pending"
+            console.log("Tasks Response:", response.data);
+
+            // Since backend returns Page<Task>
+            setTasks(response.data.content);
+
+        } catch (error) {
+
+            console.error("Error Loading Tasks:", error);
+
         }
 
-    ];
+    };
+
+    useEffect(() => {
+
+        loadTasks();
+
+    }, []);
 
     return (
 
         <MainLayout>
 
+            {/* Header */}
+
             <div className="flex justify-between items-center">
 
                 <h1 className="text-4xl font-bold">
-
                     Task Manager
-
                 </h1>
 
                 <button
-
-                    onClick={()=>setShowModal(true)}
-
-                    className="bg-cyan-500 px-5 py-3 rounded-lg font-semibold"
+                    onClick={() => setShowModal(true)}
+                    className="bg-cyan-500 hover:bg-cyan-600 transition px-5 py-3 rounded-lg font-semibold"
                 >
-
                     + Add Task
-
                 </button>
 
             </div>
 
+            {/* Search */}
+
             <input
-
                 type="text"
-
                 placeholder="Search Task..."
-
-                className="mt-8 w-full bg-slate-800 p-4 rounded-lg outline-none"
-
+                className="mt-8 w-full bg-slate-800 p-4 rounded-lg outline-none text-white"
             />
+
+            {/* Task List */}
 
             <div className="grid md:grid-cols-2 gap-6 mt-10">
 
-                {tasks.map((task) => (
+                {tasks.length === 0 ? (
 
-                    <TaskCard
+                    <div className="col-span-2 text-center text-gray-400 text-xl">
 
-                        key={task.id}
+                        No Tasks Found
 
-                        title={task.title}
+                    </div>
 
-                        priority={task.priority}
+                ) : (
 
-                        status={task.status}
+                    tasks.map((task) => (
 
-                    />
+                        <TaskCard
+                            key={task.id}
+                            title={task.title}
+                            priority={task.priority}
+                            status={task.status}
+                        />
 
-                ))}
+                    ))
+
+                )}
 
             </div>
 
+            {/* Add Task Modal */}
+
             <AddTaskModal
+                isOpen={showModal}
+                onClose={() => {
 
-            isOpen={showModal}
+                    setShowModal(false);
 
-            onClose={()=>setShowModal(false)}
+                    // Reload Tasks after modal closes
+                    loadTasks();
 
+                }}
             />
 
         </MainLayout>

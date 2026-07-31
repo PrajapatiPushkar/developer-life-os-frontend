@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createTask } from "../../services/taskService";
 
 function AddTaskModal({ isOpen, onClose }) {
 
@@ -7,24 +8,47 @@ function AddTaskModal({ isOpen, onClose }) {
     const [priority, setPriority] = useState("MEDIUM");
     const [dueDate, setDueDate] = useState("");
 
+    const [status, setStatus] = useState("PENDING");
+    const [category, setCategory] = useState("STUDY");
+
     if (!isOpen) return null;
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
 
-        e.preventDefault();
+    e.preventDefault();
 
-        console.log({
+    try {
+
+        const taskData = {
+
             title,
             description,
+            completed: false,
             priority,
-            dueDate
-        });
+            dueDate,
+            status,
+            category
 
-        alert("Task Created (Frontend)");
+        };
+
+        console.log(taskData);
+
+        await createTask(taskData);
+
+        alert("Task Created Successfully 🎉");
 
         onClose();
 
-    };
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Failed to create task");
+
+    }
+
+};
+
 
     return (
 
@@ -83,6 +107,27 @@ function AddTaskModal({ isOpen, onClose }) {
                         <option>MEDIUM</option>
                         <option>LOW</option>
 
+                    </select>
+
+                    <select
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                        className="w-full p-3 rounded bg-slate-700"
+                    >
+                        <option value="PENDING">PENDING</option>
+                        <option value="IN_PROGRESS">IN_PROGRESS</option>
+                        <option value="COMPLETED">COMPLETED</option>
+                    </select>
+
+                    <select
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                        className="w-full p-3 rounded bg-slate-700"
+                    >
+                        <option value="STUDY">STUDY</option>
+                        <option value="WORK">WORK</option>
+                        <option value="PERSONAL">PERSONAL</option>
+                        <option value="HEALTH">HEALTH</option>
                     </select>
 
                     <input
