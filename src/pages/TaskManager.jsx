@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import AddTaskModal from "../components/task/AddTaskModal";
 import TaskCard from "../components/task/TaskCard";
-import { getAllTasks } from "../services/taskService";
+import { deleteTask, getAllTasks } from "../services/taskService";
 
 function TaskManager() {
 
@@ -44,11 +44,30 @@ function TaskManager() {
 
     };
 
-    const handleDelete = (id) => {
+    const handleDelete = async (id) => {
 
-        console.log("Delete Task ID:", id);
+        const confirmDelete = window.confirm(
+            "Are you sure you want to delete this?"
+        );
 
-        // Delete API Lesson 61 me implement karenge
+        if (!confirmDelete) {
+            return;
+        }
+
+        try {
+            
+            await deleteTask(id);
+
+            alert("Task Deleted Successfully  🎉");
+
+            loadTasks();
+
+        } catch (error) {
+            
+            console.error(error);
+
+            alert("Failed to delete task");
+        }
 
     };
 
