@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import AddTaskModal from "../components/task/AddTaskModal";
+import TaskCard from "../components/task/TaskCard";
 import { getAllTasks } from "../services/taskService";
 
 function TaskManager() {
 
     const [tasks, setTasks] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [selectedTask, setSelectedTask] = useState(null);
 
     useEffect(() => {
         loadTasks();
@@ -30,6 +32,26 @@ function TaskManager() {
 
     };
 
+    const handleEdit = (task) => {
+
+        console.log("Selected Task:");
+
+        console.log(task);
+
+        setSelectedTask(task);
+
+        setShowModal(true);
+
+    };
+
+    const handleDelete = (id) => {
+
+        console.log("Delete Task ID:", id);
+
+        // Delete API Lesson 61 me implement karenge
+
+    };
+
     return (
 
         <MainLayout>
@@ -39,14 +61,24 @@ function TaskManager() {
             <div className="flex justify-between items-center mb-8">
 
                 <h1 className="text-4xl font-bold">
+
                     Task Manager
+
                 </h1>
 
                 <button
-                    onClick={() => setShowModal(true)}
+                    onClick={() => {
+
+                        setSelectedTask(null);
+
+                        setShowModal(true);
+
+                    }}
                     className="bg-cyan-500 hover:bg-cyan-600 px-5 py-3 rounded-lg font-semibold"
                 >
+
                     + Add Task
+
                 </button>
 
             </div>
@@ -60,7 +92,9 @@ function TaskManager() {
                     <div className="bg-slate-800 rounded-xl p-6 text-center">
 
                         <h2 className="text-xl text-gray-300">
+
                             No Tasks Found
+
                         </h2>
 
                     </div>
@@ -73,68 +107,12 @@ function TaskManager() {
 
                             tasks.map((task) => (
 
-                                <div
+                                <TaskCard
                                     key={task.id}
-                                    className="bg-slate-800 p-5 rounded-xl shadow-lg"
-                                >
-
-                                    <h2 className="text-2xl font-bold text-cyan-400">
-
-                                        {task.title}
-
-                                    </h2>
-
-                                    <p className="mt-3 text-gray-300">
-
-                                        {task.description}
-
-                                    </p>
-
-                                    <div className="mt-4 space-y-2">
-
-                                        <p>
-
-                                            <span className="font-semibold">
-                                                Priority :
-                                            </span>{" "}
-
-                                            {task.priority}
-
-                                        </p>
-
-                                        <p>
-
-                                            <span className="font-semibold">
-                                                Status :
-                                            </span>{" "}
-
-                                            {task.status}
-
-                                        </p>
-
-                                        <p>
-
-                                            <span className="font-semibold">
-                                                Category :
-                                            </span>{" "}
-
-                                            {task.category}
-
-                                        </p>
-
-                                        <p>
-
-                                            <span className="font-semibold">
-                                                Due Date :
-                                            </span>{" "}
-
-                                            {task.dueDate}
-
-                                        </p>
-
-                                    </div>
-
-                                </div>
+                                    task={task}
+                                    onEdit={handleEdit}
+                                    onDelete={handleDelete}
+                                />
 
                             ))
 
@@ -150,11 +128,13 @@ function TaskManager() {
 
             <AddTaskModal
                 isOpen={showModal}
+                task={selectedTask}
                 onClose={() => {
 
                     setShowModal(false);
 
-                    // Reload tasks after creating a task
+                    setSelectedTask(null);
+
                     loadTasks();
 
                 }}

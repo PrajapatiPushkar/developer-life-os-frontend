@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { createTask } from "../../services/taskService";
+import { useState, useEffect } from "react";
+import { createTask, updateTask } from "../../services/taskService";
 
-function AddTaskModal({ isOpen, onClose }) {
+function AddTaskModal({ isOpen, onClose, task }) {
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -10,6 +10,36 @@ function AddTaskModal({ isOpen, onClose }) {
 
     const [status, setStatus] = useState("TODO");
     const [category, setCategory] = useState("STUDY");
+
+    useEffect(() => {
+
+        if (task) {
+
+            setTitle(task.title);
+            setDescription(task.description);
+            setPriority(task.priority);
+            setDueDate(task.dueDate);
+            setStatus(task.status);
+            setCategory(task.category);
+
+        } else {
+
+            resetForm();
+
+        }
+
+    }, [task, isOpen]);
+
+    const resetForm = () => {
+
+        setTitle("");
+        setDescription("");
+        setPriority("MEDIUM");
+        setDueDate("");
+        setStatus("TODO");
+        setCategory("STUDY");
+
+    };
 
     if (!isOpen) return null;
 
@@ -20,6 +50,7 @@ function AddTaskModal({ isOpen, onClose }) {
         try {
 
             const taskData = {
+
                 title,
                 description,
                 completed: false,
@@ -27,21 +58,26 @@ function AddTaskModal({ isOpen, onClose }) {
                 dueDate,
                 status,
                 category
+
             };
 
             console.log(taskData);
 
-            await createTask(taskData);
+            if (task) {
 
-            alert("Task Created Successfully 🎉");
+                await updateTask(task.id, taskData);
 
-            // Reset Form
-            setTitle("");
-            setDescription("");
-            setPriority("MEDIUM");
-            setDueDate("");
-            setStatus("TODO");
-            setCategory("STUDY");
+                alert("Task Updated Successfully 🎉");
+
+            } else {
+
+                await createTask(taskData);
+
+                alert("Task Created Successfully 🎉");
+
+            }
+
+            resetForm();
 
             onClose();
 
@@ -49,7 +85,7 @@ function AddTaskModal({ isOpen, onClose }) {
 
             console.error(error);
 
-            alert("Failed to create task");
+            alert(task ? "Failed to update task" : "Failed to create task");
 
         }
 
@@ -62,7 +98,9 @@ function AddTaskModal({ isOpen, onClose }) {
             <div className="bg-slate-800 w-full max-w-lg rounded-xl p-8">
 
                 <h2 className="text-3xl font-bold text-cyan-400 mb-6">
-                    Add New Task
+
+                    {task ? "Update Task" : "Add New Task"}
+
                 </h2>
 
                 <form
@@ -148,7 +186,13 @@ function AddTaskModal({ isOpen, onClose }) {
 
                         <button
                             type="button"
-                            onClick={onClose}
+                            onClick={() => {
+
+                                resetForm();
+
+                                onClose();
+
+                            }}
                             className="bg-gray-500 hover:bg-gray-600 px-5 py-2 rounded"
                         >
                             Cancel
@@ -158,7 +202,9 @@ function AddTaskModal({ isOpen, onClose }) {
                             type="submit"
                             className="bg-cyan-500 hover:bg-cyan-600 px-5 py-2 rounded"
                         >
-                            Create Task
+
+                            {task ? "Update Task" : "Create Task"}
+
                         </button>
 
                     </div>

@@ -1,49 +1,63 @@
-function TaskCard({ title, priority, status }) {
+function TaskCard({ task, onEdit, onDelete }) {
 
     return (
 
         <div className="bg-slate-800 rounded-xl p-5 shadow-lg">
 
-            <h2 className="text-2xl font-bold">
+            <h2 className="text-2xl font-bold text-cyan-400">
 
-                📋 {title}
+                📋 {task.title}
 
             </h2>
 
-            <p className="mt-2">
+            <p className="mt-3 text-gray-300">
 
-                Priority :
+                {task.description}
+
+            </p>
+
+            <p className="mt-3">
+
+                <span className="font-semibold">
+                    Priority :
+                </span>
+
                 <span className="text-cyan-400 ml-2">
 
-                    {priority}
+                    {task.priority}
 
                 </span>
 
             </p>
 
-            <p>
+            <p className="mt-2">
 
-                Status :
+                <span className="font-semibold">
+                    Status :
+                </span>
+
                 <span className="text-green-400 ml-2">
 
-                    {status}
+                    {task.status}
 
                 </span>
 
             </p>
 
-            <div className="flex gap-4 mt-5">
+            <div className="flex gap-4 mt-6">
 
                 <button
-                    className="bg-yellow-500 px-4 py-2 rounded"
+                    onClick={() => onEdit(task)}
+                    className="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded"
                 >
-                    Edit
+                    ✏ Edit
                 </button>
 
                 <button
-                    className="bg-red-500 px-4 py-2 rounded"
+                    onClick={() => onDelete(task.id)}
+                    className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded"
                 >
-                    Delete
+                    🗑 Delete
                 </button>
 
             </div>
