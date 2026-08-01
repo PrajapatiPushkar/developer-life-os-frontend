@@ -8,47 +8,52 @@ function AddTaskModal({ isOpen, onClose }) {
     const [priority, setPriority] = useState("MEDIUM");
     const [dueDate, setDueDate] = useState("");
 
-    const [status, setStatus] = useState("PENDING");
+    const [status, setStatus] = useState("TODO");
     const [category, setCategory] = useState("STUDY");
 
     if (!isOpen) return null;
 
     const handleSubmit = async (e) => {
 
-    e.preventDefault();
+        e.preventDefault();
 
-    try {
+        try {
 
-        const taskData = {
+            const taskData = {
+                title,
+                description,
+                completed: false,
+                priority,
+                dueDate,
+                status,
+                category
+            };
 
-            title,
-            description,
-            completed: false,
-            priority,
-            dueDate,
-            status,
-            category
+            console.log(taskData);
 
-        };
+            await createTask(taskData);
 
-        console.log(taskData);
+            alert("Task Created Successfully 🎉");
 
-        await createTask(taskData);
+            // Reset Form
+            setTitle("");
+            setDescription("");
+            setPriority("MEDIUM");
+            setDueDate("");
+            setStatus("TODO");
+            setCategory("STUDY");
 
-        alert("Task Created Successfully 🎉");
+            onClose();
 
-        onClose();
+        } catch (error) {
 
-    } catch (error) {
+            console.error(error);
 
-        console.error(error);
+            alert("Failed to create task");
 
-        alert("Failed to create task");
+        }
 
-    }
-
-};
-
+    };
 
     return (
 
@@ -57,9 +62,7 @@ function AddTaskModal({ isOpen, onClose }) {
             <div className="bg-slate-800 w-full max-w-lg rounded-xl p-8">
 
                 <h2 className="text-3xl font-bold text-cyan-400 mb-6">
-
                     Add New Task
-
                 </h2>
 
                 <form
@@ -67,107 +70,95 @@ function AddTaskModal({ isOpen, onClose }) {
                     className="space-y-5"
                 >
 
+                    {/* Title */}
+
                     <input
-
                         type="text"
-
                         placeholder="Task Title"
-
                         value={title}
-
-                        onChange={(e)=>setTitle(e.target.value)}
-
-                        className="w-full p-3 rounded bg-slate-700 outline-none"
-
+                        onChange={(e) => setTitle(e.target.value)}
+                        className="w-full p-3 rounded bg-slate-700 text-white outline-none"
+                        required
                     />
+
+                    {/* Description */}
 
                     <textarea
-
                         placeholder="Description"
-
                         value={description}
-
-                        onChange={(e)=>setDescription(e.target.value)}
-
-                        className="w-full p-3 rounded bg-slate-700 outline-none"
-
+                        onChange={(e) => setDescription(e.target.value)}
+                        className="w-full p-3 rounded bg-slate-700 text-white outline-none"
+                        required
                     />
 
+                    {/* Priority */}
+
                     <select
-
                         value={priority}
-
-                        onChange={(e)=>setPriority(e.target.value)}
-
-                        className="w-full p-3 rounded bg-slate-700"
-
+                        onChange={(e) => setPriority(e.target.value)}
+                        className="w-full p-3 rounded bg-slate-700 text-white"
                     >
-
-                        <option>HIGH</option>
-                        <option>MEDIUM</option>
-                        <option>LOW</option>
-
+                        <option value="HIGH">HIGH</option>
+                        <option value="MEDIUM">MEDIUM</option>
+                        <option value="LOW">LOW</option>
                     </select>
+
+                    {/* Status */}
 
                     <select
                         value={status}
                         onChange={(e) => setStatus(e.target.value)}
-                        className="w-full p-3 rounded bg-slate-700"
+                        className="w-full p-3 rounded bg-slate-700 text-white"
                     >
-                        <option value="PENDING">PENDING</option>
+                        <option value="TODO">TODO</option>
                         <option value="IN_PROGRESS">IN_PROGRESS</option>
                         <option value="COMPLETED">COMPLETED</option>
                     </select>
 
+                    {/* Category */}
+
                     <select
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
-                        className="w-full p-3 rounded bg-slate-700"
+                        className="w-full p-3 rounded bg-slate-700 text-white"
                     >
                         <option value="STUDY">STUDY</option>
-                        <option value="WORK">WORK</option>
+                        <option value="DSA">DSA</option>
+                        <option value="SPRING_BOOT">SPRING_BOOT</option>
+                        <option value="INTERNSHIP">INTERNSHIP</option>
+                        <option value="JOB">JOB</option>
+                        <option value="GYM">GYM</option>
                         <option value="PERSONAL">PERSONAL</option>
-                        <option value="HEALTH">HEALTH</option>
+                        <option value="OTHER">OTHER</option>
                     </select>
 
+                    {/* Due Date */}
+
                     <input
-
                         type="date"
-
                         value={dueDate}
-
-                        onChange={(e)=>setDueDate(e.target.value)}
-
-                        className="w-full p-3 rounded bg-slate-700"
-
+                        onChange={(e) => setDueDate(e.target.value)}
+                        className="w-full p-3 rounded bg-slate-700 text-white"
+                        required
                     />
+
+                    {/* Buttons */}
 
                     <div className="flex justify-end gap-4">
 
                         <button
-
                             type="button"
-
                             onClick={onClose}
-
-                            className="bg-gray-500 px-5 py-2 rounded"
-
+                            className="bg-gray-500 hover:bg-gray-600 px-5 py-2 rounded"
                         >
-
                             Cancel
-
                         </button>
 
                         <button
-
                             type="submit"
-
-                            className="bg-cyan-500 px-5 py-2 rounded"
-
+                            className="bg-cyan-500 hover:bg-cyan-600 px-5 py-2 rounded"
                         >
-
                             Create Task
-
                         </button>
 
                     </div>
