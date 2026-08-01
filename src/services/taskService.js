@@ -41,4 +41,16 @@ export const deleteTask = (id) => {
     return API.delete(`/${id}`);
 };
 
+// SEARCH TASKS
+export const searchTasks = (keyword) => {
+    return API.get(`/search?keyword=${keyword}`);
+};
+
+// FILTER TASKS
+export const filterTasks = (priority) => {
+
+    return API.get(`/filter?priority=${priority}`);
+
+};
+
 export default API;

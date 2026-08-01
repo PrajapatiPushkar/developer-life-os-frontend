@@ -2,13 +2,21 @@ import { useEffect, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import AddTaskModal from "../components/task/AddTaskModal";
 import TaskCard from "../components/task/TaskCard";
-import { deleteTask, getAllTasks } from "../services/taskService";
+
+import {
+    getAllTasks,
+    deleteTask,
+    searchTasks,
+    filterTasks
+} from "../services/taskService";
 
 function TaskManager() {
 
     const [tasks, setTasks] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
+    const [searchKeyword, setSearchKeyword] = useState("");
+    const [selectedPriority, setSelectedPriority] = useState("ALL");
 
     useEffect(() => {
         loadTasks();
@@ -34,10 +42,6 @@ function TaskManager() {
 
     const handleEdit = (task) => {
 
-        console.log("Selected Task:");
-
-        console.log(task);
-
         setSelectedTask(task);
 
         setShowModal(true);
@@ -47,29 +51,84 @@ function TaskManager() {
     const handleDelete = async (id) => {
 
         const confirmDelete = window.confirm(
-            "Are you sure you want to delete this?"
+            "Are you sure you want to delete this task?"
         );
 
-        if (!confirmDelete) {
-            return;
-        }
+        if (!confirmDelete) return;
 
         try {
-            
+
             await deleteTask(id);
 
-            alert("Task Deleted Successfully  🎉");
+            alert("Task Deleted Successfully 🎉");
 
             loadTasks();
 
         } catch (error) {
-            
+
             console.error(error);
 
             alert("Failed to delete task");
+
         }
 
     };
+
+    const handleSearch = async (e) => {
+
+        const keyword = e.target.value;
+
+        setSearchKeyword(keyword);
+
+        try {
+
+            if (keyword.trim() === "") {
+
+                loadTasks();
+
+                return;
+
+            }
+
+            const response = await searchTasks(keyword);
+
+            setTasks(response.data.content);
+
+        } catch (error) {
+
+            console.error(error);
+
+        }
+
+    };
+
+    const handlePriorityFilter = async (e) => {
+
+    const priority = e.target.value;
+
+    setSelectedPriority(priority);
+
+    try {
+
+        if (priority === "ALL") {
+
+            loadTasks();
+
+            return;
+
+        }
+
+        const response = await filterTasks(priority);
+
+        setTasks(response.data);
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+};
 
     return (
 
@@ -102,7 +161,42 @@ function TaskManager() {
 
             </div>
 
+            {/* Search Box */}
+
+            <div className="mb-8">
+
+                <input
+                    type="text"
+                    placeholder="🔍 Search Tasks..."
+                    value={searchKeyword}
+                    onChange={handleSearch}
+                    className="w-full bg-slate-800 text-white p-4 rounded-lg outline-none focus:ring-2 focus:ring-cyan-500"
+                />
+
+            </div>
+
             {/* Task List */}
+
+            <div className="my-6">
+
+    <select
+
+        value={selectedPriority}
+
+        onChange={handlePriorityFilter}
+
+        className="bg-slate-800 text-white p-3 rounded-lg"
+
+    >
+
+        <option value="ALL">All Priorities</option>
+        <option value="HIGH">HIGH</option>
+        <option value="MEDIUM">MEDIUM</option>
+        <option value="LOW">LOW</option>
+
+    </select>
+
+</div>
 
             {
 
@@ -143,7 +237,7 @@ function TaskManager() {
 
             }
 
-            {/* Add Task Modal */}
+            {/* Modal */}
 
             <AddTaskModal
                 isOpen={showModal}
