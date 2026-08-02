@@ -15,26 +15,36 @@ function TaskManager() {
     const [tasks, setTasks] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
+
     const [searchKeyword, setSearchKeyword] = useState("");
+
     const [selectedPriority, setSelectedPriority] = useState("ALL");
+    const [selectedStatus, setSelectedStatus] = useState("ALL");
+
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
-        loadTasks();
-    }, []);
 
-    const loadTasks = async () => {
+        loadTasks(currentPage);
+
+    }, [currentPage]);
+
+    const loadTasks = async (page = currentPage) => {
 
         try {
 
-            const response = await getAllTasks();
-
-            console.log(response.data);
+            const response = await getAllTasks(page, 5);
 
             setTasks(response.data.content);
 
+            setCurrentPage(response.data.number);
+
+            setTotalPages(response.data.totalPages);
+
         } catch (error) {
 
-            console.error("Error Loading Tasks:", error);
+            console.error(error);
 
         }
 
@@ -62,7 +72,7 @@ function TaskManager() {
 
             alert("Task Deleted Successfully 🎉");
 
-            loadTasks();
+            loadTasks(currentPage);
 
         } catch (error) {
 
@@ -84,7 +94,7 @@ function TaskManager() {
 
             if (keyword.trim() === "") {
 
-                loadTasks();
+                loadTasks(currentPage);
 
                 return;
 
@@ -102,33 +112,49 @@ function TaskManager() {
 
     };
 
-    const handlePriorityFilter = async (e) => {
+    const applyFilters = async (priority, status) => {
 
-    const priority = e.target.value;
+        try {
 
-    setSelectedPriority(priority);
+            if (priority === "ALL" && status === "ALL") {
 
-    try {
+                loadTasks(currentPage);
 
-        if (priority === "ALL") {
+                return;
 
-            loadTasks();
+            }
 
-            return;
+            const response = await filterTasks(priority, status);
+
+            setTasks(response.data);
+
+        } catch (error) {
+
+            console.error(error);
 
         }
 
-        const response = await filterTasks(priority);
+    };
 
-        setTasks(response.data);
+    const handlePriorityFilter = async (e) => {
 
-    } catch (error) {
+        const priority = e.target.value;
 
-        console.error(error);
+        setSelectedPriority(priority);
 
-    }
+        await applyFilters(priority, selectedStatus);
 
-};
+    };
+
+    const handleStatusFilter = async (e) => {
+
+        const status = e.target.value;
+
+        setSelectedStatus(status);
+
+        await applyFilters(selectedPriority, status);
+
+    };
 
     return (
 
@@ -161,54 +187,61 @@ function TaskManager() {
 
             </div>
 
-            {/* Search Box */}
+            {/* Search */}
 
-            <div className="mb-8">
+            <div className="mb-6">
 
                 <input
                     type="text"
                     placeholder="🔍 Search Tasks..."
                     value={searchKeyword}
                     onChange={handleSearch}
-                    className="w-full bg-slate-800 text-white p-4 rounded-lg outline-none focus:ring-2 focus:ring-cyan-500"
+                    className="w-full bg-slate-800 text-white p-4 rounded-lg outline-none"
                 />
+
+            </div>
+
+            {/* Filters */}
+
+            <div className="flex gap-4 mb-8">
+
+                <select
+                    value={selectedPriority}
+                    onChange={handlePriorityFilter}
+                    className="bg-slate-800 text-white p-3 rounded-lg"
+                >
+
+                    <option value="ALL">All Priorities</option>
+                    <option value="HIGH">HIGH</option>
+                    <option value="MEDIUM">MEDIUM</option>
+                    <option value="LOW">LOW</option>
+
+                </select>
+
+                <select
+                    value={selectedStatus}
+                    onChange={handleStatusFilter}
+                    className="bg-slate-800 text-white p-3 rounded-lg"
+                >
+
+                    <option value="ALL">All Status</option>
+                    <option value="TODO">TODO</option>
+                    <option value="IN_PROGRESS">IN_PROGRESS</option>
+                    <option value="COMPLETED">COMPLETED</option>
+
+                </select>
 
             </div>
 
             {/* Task List */}
 
-            <div className="my-6">
-
-    <select
-
-        value={selectedPriority}
-
-        onChange={handlePriorityFilter}
-
-        className="bg-slate-800 text-white p-3 rounded-lg"
-
-    >
-
-        <option value="ALL">All Priorities</option>
-        <option value="HIGH">HIGH</option>
-        <option value="MEDIUM">MEDIUM</option>
-        <option value="LOW">LOW</option>
-
-    </select>
-
-</div>
-
             {
 
                 tasks.length === 0 ? (
 
-                    <div className="bg-slate-800 rounded-xl p-6 text-center">
+                    <div className="bg-slate-800 rounded-xl p-8 text-center">
 
-                        <h2 className="text-xl text-gray-300">
-
-                            No Tasks Found
-
-                        </h2>
+                        <h2>No Tasks Found</h2>
 
                     </div>
 
@@ -237,6 +270,46 @@ function TaskManager() {
 
             }
 
+            {/* Pagination */}
+
+            <div className="flex justify-center items-center gap-4 mt-10">
+
+                <button
+
+                    disabled={currentPage === 0}
+
+                    onClick={() => setCurrentPage(currentPage - 1)}
+
+                    className="bg-slate-700 px-5 py-2 rounded disabled:opacity-40"
+
+                >
+
+                    Previous
+
+                </button>
+
+                <span>
+
+                    Page {currentPage + 1} of {totalPages}
+
+                </span>
+
+                <button
+
+                    disabled={currentPage + 1 >= totalPages}
+
+                    onClick={() => setCurrentPage(currentPage + 1)}
+
+                    className="bg-cyan-500 px-5 py-2 rounded disabled:opacity-40"
+
+                >
+
+                    Next
+
+                </button>
+
+            </div>
+
             {/* Modal */}
 
             <AddTaskModal
@@ -248,7 +321,7 @@ function TaskManager() {
 
                     setSelectedTask(null);
 
-                    loadTasks();
+                    loadTasks(currentPage);
 
                 }}
             />

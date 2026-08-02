@@ -17,8 +17,8 @@ API.interceptors.request.use((config) => {
 });
 
 // GET ALL TASKS
-export const getAllTasks = () => {
-    return API.get("");
+export const getAllTasks = (page = 0, size = 5) => {
+    return API.get(`?page=${page}&size=${size}`);
 };
 
 // CREATE TASK
@@ -47,9 +47,19 @@ export const searchTasks = (keyword) => {
 };
 
 // FILTER TASKS
-export const filterTasks = (priority) => {
+export const filterTasks = (priority, status) => {
 
-    return API.get(`/filter?priority=${priority}`);
+    let url = "/filter?";
+
+    if (priority && priority !== "ALL") {
+        url += `priority=${priority}&`;
+    }
+
+    if (status && status !== "ALL") {
+        url += `status=${status}&`;
+    }
+
+    return API.get(url);
 
 };
 
