@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import DashboardCard from "../components/dashboard/DashboardCard";
 import { getDashboardSummary } from "../services/taskService";
+import TaskStatusChart from "../components/dashboard/TaskStatusChart";
+import TaskOverviewChart from "../components/dashboard/TaskOverviewChart";
 
 function Dashboard() {
 
@@ -78,6 +80,24 @@ function Dashboard() {
                     title="High Priority"
                     value={summary.highPriorityTasks}
                     icon="🔥"
+                />
+
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-8 mt-10">
+
+                <TaskStatusChart
+                
+                  completed={summary.completedTasks}
+
+                  pending={summary.pendingTasks}
+                
+                />
+
+                <TaskOverviewChart
+
+                    summary={summary}
+
                 />
 
             </div>
