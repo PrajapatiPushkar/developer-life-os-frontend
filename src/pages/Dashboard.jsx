@@ -1,16 +1,42 @@
+import { useEffect, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import DashboardCard from "../components/dashboard/DashboardCard";
+import { getDashboardSummary } from "../services/taskService";
 
 function Dashboard() {
 
-    const dashboardData = {
+    const [summary, setSummary] = useState({
 
-        tasks: 12,
-        goals: 5,
-        dsa: 120,
-        applications: 18
+        totalTasks: 0,
+        completedTasks: 0,
+        pendingTasks: 0,
+        highPriorityTasks: 0
+
+    });
+
+    const loadDashboard = async () => {
+
+        try {
+
+            const response = await getDashboardSummary();
+
+            console.log(response.data);
+
+            setSummary(response.data);
+
+        } catch (error) {
+
+            console.error("Error loading dashboard:", error);
+
+        }
 
     };
+
+    useEffect(() => {
+
+        loadDashboard();
+
+    }, []);
 
     return (
 
@@ -31,27 +57,27 @@ function Dashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
 
                 <DashboardCard
-                    title="Tasks"
-                    value={dashboardData.tasks}
+                    title="Total Tasks"
+                    value={summary.totalTasks}
                     icon="📋"
                 />
 
                 <DashboardCard
-                    title="Goals"
-                    value={dashboardData.goals}
-                    icon="🎯"
+                    title="Completed"
+                    value={summary.completedTasks}
+                    icon="✅"
                 />
 
                 <DashboardCard
-                    title="DSA Solved"
-                    value={dashboardData.dsa}
-                    icon="📚"
+                    title="Pending"
+                    value={summary.pendingTasks}
+                    icon="⏳"
                 />
 
                 <DashboardCard
-                    title="Applications"
-                    value={dashboardData.applications}
-                    icon="💼"
+                    title="High Priority"
+                    value={summary.highPriorityTasks}
+                    icon="🔥"
                 />
 
             </div>

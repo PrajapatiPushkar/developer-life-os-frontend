@@ -74,4 +74,13 @@ export const filterTasks = (priority, status) => {
 
 };
 
+// ==========================
+// DASHBOARD SUMMARY
+// ==========================
+export const getDashboardSummary = () => {
+
+    return API.get("/dashboard");
+
+};
+
 export default API;
