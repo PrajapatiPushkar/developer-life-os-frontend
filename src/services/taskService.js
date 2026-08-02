@@ -17,8 +17,19 @@ API.interceptors.request.use((config) => {
 });
 
 // GET ALL TASKS
-export const getAllTasks = (page = 0, size = 5) => {
-    return API.get(`?page=${page}&size=${size}`);
+export const getAllTasks = (
+    page = 0,
+    size = 5,
+    sortBy = "id",
+    direction = "asc"
+) => {
+
+    return API.get(
+
+        `?page=${page}&size=${size}&sort=${sortBy},${direction}`
+
+    );
+
 };
 
 // CREATE TASK
