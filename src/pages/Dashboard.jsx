@@ -5,138 +5,114 @@ import { getDashboardSummary } from "../services/taskService";
 import TaskStatusChart from "../components/dashboard/TaskStatusChart";
 import TaskOverviewChart from "../components/dashboard/TaskOverviewChart";
 import UpcomingTasks from "../components/dashboard/UpcomingTasks";
+import ProgressCard from "../components/dashboard/ProgressCard";
 
 function Dashboard() {
 
-    const [summary, setSummary] = useState({
 
-        totalTasks: 0,
-        completedTasks: 0,
-        pendingTasks: 0,
-        highPriorityTasks: 0
-
-    });
-
-    const loadDashboard = async () => {
-
-        try {
-
-            const response = await getDashboardSummary();
-
-            console.log(response.data);
-
-            setSummary(response.data);
-
-        } catch (error) {
-
-            console.error("Error loading dashboard:", error);
-
-        }
-
-    };
-
-    const [upcomingTasks, setUpcomingTasks] = useState([]);
-
-    const loadUpcomingTasks = async () => {
-
+  const loadDashboard = async () => {
     try {
+      const response = await getDashboardSummary();
 
-        const response = await getUpcomingTasks();
+      console.log(response.data);
 
-        setUpcomingTasks(response.data);
-
+      setSummary(response.data);
     } catch (error) {
-
-        console.error(error);
-
+      console.error("Error loading dashboard:", error);
     }
+  };
 
-};
+  const [upcomingTasks, setUpcomingTasks] = useState([]);
 
-    useEffect(() => {
+  const loadUpcomingTasks = async () => {
+    try {
+      const response = await getUpcomingTasks();
 
-        loadDashboard();
+      setUpcomingTasks(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-        loadUpcomingTasks();
+  const [summary, setSummary] = useState({
+    totalTasks: 0,
 
-    }, []);
+    completedTasks: 0,
 
-    return (
+    pendingTasks: 0,
 
-        <MainLayout>
+    highPriorityTasks: 0,
 
-            <h1 className="text-4xl font-bold">
+    overdueTasks: 0,
 
-                Welcome Pushkar 🚀
+    dueToday: 0,
 
-            </h1>
+    completionPercentage: 0,
+  });
 
-            <p className="text-gray-400 mt-2">
+  useEffect(() => {
+    loadDashboard();
 
-                Welcome back to your Developer-Life-OS Dashboard.
+    loadUpcomingTasks();
+  }, []);
 
-            </p>
+  return (
+    <MainLayout>
+      <h1 className="text-4xl font-bold">Welcome Pushkar 🚀</h1>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
+      <p className="text-gray-400 mt-2">
+        Welcome back to your Developer-Life-OS Dashboard.
+      </p>
 
-                <DashboardCard
-                    title="Total Tasks"
-                    value={summary.totalTasks}
-                    icon="📋"
-                />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
+        <DashboardCard
+          title="Total Tasks"
+          value={summary.totalTasks}
+          icon="📋"
+        />
 
-                <DashboardCard
-                    title="Completed"
-                    value={summary.completedTasks}
-                    icon="✅"
-                />
+        <DashboardCard
+          title="Completed"
+          value={summary.completedTasks}
+          icon="✅"
+        />
 
-                <DashboardCard
-                    title="Pending"
-                    value={summary.pendingTasks}
-                    icon="⏳"
-                />
+        <DashboardCard title="Pending" value={summary.pendingTasks} icon="⏳" />
 
-                <DashboardCard
-                    title="High Priority"
-                    value={summary.highPriorityTasks}
-                    icon="🔥"
-                />
+        <DashboardCard
+          title="High Priority"
+          value={summary.highPriorityTasks}
+          icon="🔥"
+        />
 
-            </div>
+        <DashboardCard title="Overdue" value={summary.overdueTasks} icon="🔴" />
 
-            <div className="grid lg:grid-cols-2 gap-8 mt-10">
+        <DashboardCard title="Due Today" value={summary.dueToday} icon="📅" />
+      </div>
 
-                <TaskStatusChart
-                
-                  completed={summary.completedTasks}
+      <div className="grid lg:grid-cols-2 gap-8 mt-10">
+        <TaskStatusChart
+          completed={summary.completedTasks}
+          pending={summary.pendingTasks}
+        />
 
-                  pending={summary.pendingTasks}
-                
-                />
+        <TaskOverviewChart summary={summary} />
+      </div>
 
-                <TaskOverviewChart
+      <div className="mt-10">
+        <upcomingTasks tasks={upcomingTasks} />
+      </div>
 
-                    summary={summary}
+      <div className="mt-10">
+           
+           <ProgressCard
+           
+                progress={summary.completionPercentage} 
 
-                />
-
-            </div>
-
-            <div className="mt-10">
-
-                <upcomingTasks
-                
-                   tasks={upcomingTasks}
-
-                />
-
-            </div>
-
-        </MainLayout>
-
-    );
-
+           />
+      </div>
+    </MainLayout>
+  );
 }
 
 export default Dashboard;
