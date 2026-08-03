@@ -83,4 +83,11 @@ export const getDashboardSummary = () => {
 
 };
 
+// Upcoming task
+export const getUpcomingTasks = () => {
+
+    return API.get("/upcoming");
+
+};
+
 export default API;

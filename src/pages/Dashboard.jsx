@@ -4,6 +4,7 @@ import DashboardCard from "../components/dashboard/DashboardCard";
 import { getDashboardSummary } from "../services/taskService";
 import TaskStatusChart from "../components/dashboard/TaskStatusChart";
 import TaskOverviewChart from "../components/dashboard/TaskOverviewChart";
+import UpcomingTasks from "../components/dashboard/UpcomingTasks";
 
 function Dashboard() {
 
@@ -34,9 +35,29 @@ function Dashboard() {
 
     };
 
+    const [upcomingTasks, setUpcomingTasks] = useState([]);
+
+    const loadUpcomingTasks = async () => {
+
+    try {
+
+        const response = await getUpcomingTasks();
+
+        setUpcomingTasks(response.data);
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+};
+
     useEffect(() => {
 
         loadDashboard();
+
+        loadUpcomingTasks();
 
     }, []);
 
@@ -97,6 +118,16 @@ function Dashboard() {
                 <TaskOverviewChart
 
                     summary={summary}
+
+                />
+
+            </div>
+
+            <div className="mt-10">
+
+                <upcomingTasks
+                
+                   tasks={upcomingTasks}
 
                 />
 
