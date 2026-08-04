@@ -3,6 +3,7 @@ import MainLayout from "../layouts/MainLayout";
 import AddPlannerModal from "../components/planner/AddPlannerModal";
 import PlannerProgress from "../components/planner/PlannerProgress";
 import PlannerSection from "../components/planner/PlannerSection";
+import TodayFocus from "../components/planner/TodayFocus";
 
 import {
     getAllPlanners,
@@ -15,6 +16,7 @@ function DailyPlanner() {
     const [planners, setPlanners] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedPlanner, setSelectedPlanner] = useState(null);
+    const [focusTasks, setFocusTasks] = useState([]);
 
     // Group planners by time slot
     const morningPlans = planners.filter(
@@ -35,6 +37,9 @@ function DailyPlanner() {
 
     useEffect(() => {
         loadPlanner();
+
+        loadFocusTasks();
+
     }, []);
 
     const loadPlanner = async () => {
@@ -108,6 +113,24 @@ function DailyPlanner() {
 
     };
 
+    const loadFocusTasks = async () => {
+
+        try {
+
+            const response = await getTodayFocus();
+
+            setFocusTasks(response.data);
+
+        }
+
+        catch(error){
+
+            console.error(error);
+
+        }
+
+    };
+
     return (
 
         <MainLayout>
@@ -139,6 +162,12 @@ function DailyPlanner() {
                 </button>
 
             </div>
+
+            <TodayFocus
+
+                planners={focusTasks}
+
+            />
 
             {/* Progress */}
 

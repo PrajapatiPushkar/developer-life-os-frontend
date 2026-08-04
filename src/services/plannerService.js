@@ -50,5 +50,11 @@ export const togglePlanner = (id) => {
 
 };
 
+export const getTodayFocus = () => {
+
+    return API.get("/focus");
+
+};
+
 
 export default API;
