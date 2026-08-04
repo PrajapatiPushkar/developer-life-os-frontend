@@ -1,16 +1,50 @@
-function PlannerCard({ planner }) {
+function PlannerCard({
+
+    planner,
+
+    onEdit,
+
+    onDelete,
+
+    onToggle
+
+}) {
 
     return (
 
         <div className="bg-slate-800 rounded-xl p-5 shadow-lg">
 
-            <h2 className="text-2xl font-bold">
+            <div className="flex justify-between">
 
-                {planner.title}
+                <h2 className="text-xl font-bold">
 
-            </h2>
+                    {planner.title}
 
-            <p className="text-gray-300 mt-2">
+                </h2>
+
+                <button
+
+                    onClick={() => onToggle(planner.id)}
+
+                    className="text-2xl"
+
+                >
+
+                    {
+
+                        planner.completed
+
+                            ? "✅"
+
+                            : "⬜"
+
+                    }
+
+                </button>
+
+            </div>
+
+            <p className="text-gray-300 mt-3">
 
                 {planner.description}
 
@@ -20,47 +54,43 @@ function PlannerCard({ planner }) {
 
                 <p>
 
-                    Time Slot :
-
-                    <span className="text-cyan-400 ml-2">
-
-                        {planner.timeSlot}
-
-                    </span>
+                    📅 {planner.plannerDate}
 
                 </p>
 
                 <p>
 
-                    Date :
-
-                    <span className="text-green-400 ml-2">
-
-                        {planner.plannerDate}
-
-                    </span>
+                    ⏰ {planner.timeSlot}
 
                 </p>
 
-                <p>
+            </div>
 
-                    Status :
+            <div className="flex gap-3 mt-5">
 
-                    <span className="ml-2">
+                <button
 
-                        {
+                    onClick={() => onEdit(planner)}
 
-                            planner.completed
+                    className="bg-yellow-500 px-4 py-2 rounded"
 
-                                ? "✅ Completed"
+                >
 
-                                : "⏳ Pending"
+                    Edit
 
-                        }
+                </button>
 
-                    </span>
+                <button
 
-                </p>
+                    onClick={() => onDelete(planner.id)}
+
+                    className="bg-red-500 px-4 py-2 rounded"
+
+                >
+
+                    Delete
+
+                </button>
 
             </div>
 

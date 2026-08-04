@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import PlannerCard from "../components/planner/PlannerCard";
 import AddPlannerModal from "../components/planner/AddPlannerModal";
-import { getAllPlanners } from "../services/plannerService";
+import PlannerProgress from "../components/planner/PlannerProgress";
+
+import {
+    getAllPlanners,
+    deletePlanner,
+    togglePlanner
+} from "../services/plannerService";
 
 function DailyPlanner() {
 
@@ -30,6 +36,61 @@ function DailyPlanner() {
 
     };
 
+    // Edit Planner
+    const handleEdit = (planner) => {
+
+        setSelectedPlanner(planner);
+
+        setShowModal(true);
+
+    };
+
+    // Delete Planner
+    const handleDelete = async (id) => {
+
+        const confirmDelete = window.confirm(
+            "Are you sure you want to delete this planner?"
+        );
+
+        if (!confirmDelete) return;
+
+        try {
+
+            await deletePlanner(id);
+
+            alert("Planner Deleted Successfully 🎉");
+
+            loadPlanner();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert("Failed to delete planner");
+
+        }
+
+    };
+
+    // Toggle Complete
+    const handleToggle = async (id) => {
+
+        try {
+
+            await togglePlanner(id);
+
+            loadPlanner();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert("Failed to update planner");
+
+        }
+
+    };
+
     return (
 
         <MainLayout>
@@ -49,6 +110,7 @@ function DailyPlanner() {
                     onClick={() => {
 
                         setSelectedPlanner(null);
+
                         setShowModal(true);
 
                     }}
@@ -63,55 +125,59 @@ function DailyPlanner() {
 
             </div>
 
+            {/* Progress */}
+
+            <PlannerProgress planners={planners} />
+
             {/* Planner List */}
 
             {
 
-                planners.length === 0 ?
+                planners.length === 0 ? (
 
-                    (
+                    <div className="bg-slate-800 rounded-xl p-8 text-center">
 
-                        <div className="bg-slate-800 rounded-xl p-8 text-center">
+                        <h2 className="text-xl text-gray-300">
 
-                            <h2 className="text-xl text-gray-300">
+                            No Plans Found
 
-                                No Plans Found
+                        </h2>
 
-                            </h2>
+                    </div>
 
-                        </div>
+                ) : (
 
-                    )
+                    <div className="grid md:grid-cols-2 gap-6">
 
-                    :
+                        {
 
-                    (
+                            planners.map((planner) => (
 
-                        <div className="grid md:grid-cols-2 gap-6">
+                                <PlannerCard
 
-                            {
+                                    key={planner.id}
 
-                                planners.map((planner) => (
+                                    planner={planner}
 
-                                    <PlannerCard
+                                    onEdit={handleEdit}
 
-                                        key={planner.id}
+                                    onDelete={handleDelete}
 
-                                        planner={planner}
+                                    onToggle={handleToggle}
 
-                                    />
+                                />
 
-                                ))
+                            ))
 
-                            }
+                        }
 
-                        </div>
+                    </div>
 
-                    )
+                )
 
             }
 
-            {/* Add Planner Modal */}
+            {/* Modal */}
 
             <AddPlannerModal
 

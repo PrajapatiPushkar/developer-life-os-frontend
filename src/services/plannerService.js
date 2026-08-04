@@ -44,4 +44,11 @@ export const deletePlanner = (id) => {
 
 };
 
+export const togglePlanner = (id) => {
+
+    return API.patch(`/${id}/toggle`);
+
+};
+
+
 export default API;
