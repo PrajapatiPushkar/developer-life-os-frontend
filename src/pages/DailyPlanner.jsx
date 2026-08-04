@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
-import PlannerCard from "../components/planner/PlannerCard";
 import AddPlannerModal from "../components/planner/AddPlannerModal";
 import PlannerProgress from "../components/planner/PlannerProgress";
+import PlannerSection from "../components/planner/PlannerSection";
 
 import {
     getAllPlanners,
@@ -15,6 +15,23 @@ function DailyPlanner() {
     const [planners, setPlanners] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedPlanner, setSelectedPlanner] = useState(null);
+
+    // Group planners by time slot
+    const morningPlans = planners.filter(
+        (p) => p.timeSlot === "MORNING"
+    );
+
+    const afternoonPlans = planners.filter(
+        (p) => p.timeSlot === "AFTERNOON"
+    );
+
+    const eveningPlans = planners.filter(
+        (p) => p.timeSlot === "EVENING"
+    );
+
+    const nightPlans = planners.filter(
+        (p) => p.timeSlot === "NIGHT"
+    );
 
     useEffect(() => {
         loadPlanner();
@@ -100,9 +117,7 @@ function DailyPlanner() {
             <div className="flex justify-between items-center mb-8">
 
                 <h1 className="text-4xl font-bold">
-
                     Daily Planner
-
                 </h1>
 
                 <button
@@ -129,7 +144,7 @@ function DailyPlanner() {
 
             <PlannerProgress planners={planners} />
 
-            {/* Planner List */}
+            {/* Planner Sections */}
 
             {
 
@@ -147,37 +162,51 @@ function DailyPlanner() {
 
                 ) : (
 
-                    <div className="grid md:grid-cols-2 gap-6">
+                    <>
 
-                        {
+                        <PlannerSection
+                            title="Morning"
+                            icon="🌅"
+                            planners={morningPlans}
+                            onEdit={handleEdit}
+                            onDelete={handleDelete}
+                            onToggle={handleToggle}
+                        />
 
-                            planners.map((planner) => (
+                        <PlannerSection
+                            title="Afternoon"
+                            icon="☀️"
+                            planners={afternoonPlans}
+                            onEdit={handleEdit}
+                            onDelete={handleDelete}
+                            onToggle={handleToggle}
+                        />
 
-                                <PlannerCard
+                        <PlannerSection
+                            title="Evening"
+                            icon="🌆"
+                            planners={eveningPlans}
+                            onEdit={handleEdit}
+                            onDelete={handleDelete}
+                            onToggle={handleToggle}
+                        />
 
-                                    key={planner.id}
+                        <PlannerSection
+                            title="Night"
+                            icon="🌙"
+                            planners={nightPlans}
+                            onEdit={handleEdit}
+                            onDelete={handleDelete}
+                            onToggle={handleToggle}
+                        />
 
-                                    planner={planner}
-
-                                    onEdit={handleEdit}
-
-                                    onDelete={handleDelete}
-
-                                    onToggle={handleToggle}
-
-                                />
-
-                            ))
-
-                        }
-
-                    </div>
+                    </>
 
                 )
 
             }
 
-            {/* Modal */}
+            {/* Add / Edit Modal */}
 
             <AddPlannerModal
 
