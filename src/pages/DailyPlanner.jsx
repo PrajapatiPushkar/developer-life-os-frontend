@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import PlannerCard from "../components/planner/PlannerCard";
+import AddPlannerModal from "../components/planner/AddPlannerModal";
 import { getAllPlanners } from "../services/plannerService";
 
 function DailyPlanner() {
 
     const [planners, setPlanners] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedPlanner, setSelectedPlanner] = useState(null);
 
     useEffect(() => {
-
         loadPlanner();
-
     }, []);
 
     const loadPlanner = async () => {
@@ -23,7 +24,7 @@ function DailyPlanner() {
 
         } catch (error) {
 
-            console.error(error);
+            console.error("Error loading planners:", error);
 
         }
 
@@ -32,6 +33,8 @@ function DailyPlanner() {
     return (
 
         <MainLayout>
+
+            {/* Header */}
 
             <div className="flex justify-between items-center mb-8">
 
@@ -43,7 +46,14 @@ function DailyPlanner() {
 
                 <button
 
-                    className="bg-cyan-500 px-5 py-3 rounded-lg"
+                    onClick={() => {
+
+                        setSelectedPlanner(null);
+                        setShowModal(true);
+
+                    }}
+
+                    className="bg-cyan-500 hover:bg-cyan-600 px-5 py-3 rounded-lg font-semibold"
 
                 >
 
@@ -53,13 +63,23 @@ function DailyPlanner() {
 
             </div>
 
+            {/* Planner List */}
+
             {
 
                 planners.length === 0 ?
 
                     (
 
-                        <h2>No Plans Found</h2>
+                        <div className="bg-slate-800 rounded-xl p-8 text-center">
+
+                            <h2 className="text-xl text-gray-300">
+
+                                No Plans Found
+
+                            </h2>
+
+                        </div>
 
                     )
 
@@ -90,6 +110,26 @@ function DailyPlanner() {
                     )
 
             }
+
+            {/* Add Planner Modal */}
+
+            <AddPlannerModal
+
+                isOpen={showModal}
+
+                planner={selectedPlanner}
+
+                onClose={() => {
+
+                    setShowModal(false);
+
+                    setSelectedPlanner(null);
+
+                    loadPlanner();
+
+                }}
+
+            />
 
         </MainLayout>
 
