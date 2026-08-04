@@ -6,10 +6,10 @@ import Dashboard from "../pages/Dashboard";
 import Home from "../pages/Home";
 import NotFound from "../pages/NotFound";
 import TaskManager from "../pages/TaskManager";
-import Planner from "../pages/Planner";
 import Goals from "../pages/Goals";
 import Dsa from "../pages/Dsa";
 import Internships from "../pages/Internships";
+import DailyPlanner from "../pages/DailyPlanner";
 
 function AppRoutes() {
   return (
@@ -39,7 +39,7 @@ function AppRoutes() {
           path="/planner"
           element={
             <ProtectedRoute>
-              <Planner />
+              <DailyPlanner />
             </ProtectedRoute>
           }
         />
