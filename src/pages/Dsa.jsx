@@ -1,6 +1,26 @@
+import MainLayout from "../layouts/MainLayout";
+
 function Dsa() {
 
-    return <h1 className="text-white text-4xl p-10">DSA Progress</h1>;
+    return (
+
+        <MainLayout>
+
+            <h1 className="text-4xl font-bold">
+
+                DSA Progress Tracker
+
+            </h1>
+
+            <p className="text-gray-400 mt-2">
+
+                Track your coding journey.
+
+            </p>
+
+        </MainLayout>
+
+    );
 
 }
 
