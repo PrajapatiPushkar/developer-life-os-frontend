@@ -30,3 +30,7 @@ export const updateInternship = (id, internship) =>
 
 export const deleteInternship = (id) =>
     API.delete(`/${id}`);
+
+export const getStatistics = () =>
+
+    API.get("/statistics");

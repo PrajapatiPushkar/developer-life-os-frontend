@@ -32,4 +32,8 @@ export const deleteGoal = (id) => {
     return API.delete(`/${id}`);
 };
 
+export const getGoalStatistics = () =>
+
+    API.get("/statistics");
+
 export default API;

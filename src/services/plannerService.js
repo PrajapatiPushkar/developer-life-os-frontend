@@ -56,5 +56,9 @@ export const getTodayFocus = () => {
 
 };
 
+export const getPlannerStatistics = () =>
+
+    API.get("/statistics");
+
 
 export default API;
