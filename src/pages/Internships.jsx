@@ -4,15 +4,23 @@ import MainLayout from "../layouts/MainLayout";
 
 import InternshipCard from "../components/internship/InternshipCard";
 
+import InternshipModal from "../components/internship/InternshipModal";
+
 import {
 
-    getAllInternships
+    getAllInternships,
+
+    deleteInternship
 
 } from "../services/internshipService";
 
 function Internships() {
 
     const [internships, setInternships] = useState([]);
+
+    const [showModal, setShowModal] = useState(false);
+
+    const [selectedInternship, setSelectedInternship] = useState(null);
 
     useEffect(() => {
 
@@ -27,6 +35,38 @@ function Internships() {
             const response = await getAllInternships();
 
             setInternships(response.data);
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+        }
+
+    };
+
+    const handleEdit = (internship) => {
+
+        setSelectedInternship(internship);
+
+        setShowModal(true);
+
+    };
+
+    const handleDelete = async (id) => {
+
+        if (!window.confirm("Delete this application?"))
+
+            return;
+
+        try {
+
+            await deleteInternship(id);
+
+            loadInternships();
+
+            alert("Application Deleted");
 
         }
 
@@ -61,6 +101,14 @@ function Internships() {
                 </div>
 
                 <button
+
+                    onClick={() => {
+
+                        setSelectedInternship(null);
+
+                        setShowModal(true);
+
+                    }}
 
                     className="bg-cyan-500 hover:bg-cyan-600 px-5 py-3 rounded-lg"
 
@@ -106,6 +154,10 @@ function Internships() {
 
                                         internship={internship}
 
+                                        onEdit={handleEdit}
+
+                                        onDelete={handleDelete}
+
                                     />
 
                                 ))
@@ -117,6 +169,27 @@ function Internships() {
                     )
 
             }
+
+            <InternshipModal
+
+                isOpen={showModal}
+
+                internship={selectedInternship}
+
+                onClose={() => {
+
+                    setShowModal(false);
+
+                    setSelectedInternship(null);
+
+                    loadInternships();
+                    
+                }}
+
+
+
+
+            />
 
         </MainLayout>
 

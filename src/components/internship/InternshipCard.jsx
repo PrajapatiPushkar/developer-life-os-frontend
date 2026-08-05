@@ -1,4 +1,12 @@
-function InternshipCard({ internship }) {
+function InternshipCard({
+
+    internship,
+
+    onEdit,
+
+    onDelete
+
+}) {
 
     return (
 
@@ -12,37 +20,41 @@ function InternshipCard({ internship }) {
 
             <div className="space-y-2 mt-4">
 
-                <p>
+                <p><strong>Role:</strong> {internship.role}</p>
 
-                    <strong>Role:</strong>
+                <p><strong>Status:</strong> {internship.status}</p>
 
-                    {internship.role}
+                <p><strong>Location:</strong> {internship.location}</p>
 
-                </p>
+                <p><strong>Deadline:</strong> {internship.deadline}</p>
 
-                <p>
+            </div>
 
-                    <strong>Status:</strong>
+            <div className="flex gap-3 mt-6">
 
-                    {internship.status}
+                <button
 
-                </p>
+                    onClick={() => onEdit(internship)}
 
-                <p>
+                    className="flex-1 bg-yellow-500 hover:bg-yellow-600 py-2 rounded"
 
-                    <strong>Location:</strong>
+                >
 
-                    {internship.location}
+                    Edit
 
-                </p>
+                </button>
 
-                <p>
+                <button
 
-                    <strong>Deadline:</strong>
+                    onClick={() => onDelete(internship.id)}
 
-                    {internship.deadline}
+                    className="flex-1 bg-red-500 hover:bg-red-600 py-2 rounded"
 
-                </p>
+                >
+
+                    Delete
+
+                </button>
 
             </div>
 
