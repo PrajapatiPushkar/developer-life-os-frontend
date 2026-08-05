@@ -6,7 +6,8 @@ import AddProblemModal from "../components/dsa/AddProblemModal";
 
 import {
     getAllProblems,
-    getStatistics
+    getStatistics,
+    deleteProblem
 } from "../services/problemService";
 
 function Dsa() {
@@ -71,6 +72,40 @@ function Dsa() {
             setStatistics(response.data);
 
         } catch (error) {
+
+            console.error(error);
+
+        }
+
+    };
+
+    const handleEdit = (problem) => {
+
+        setSelectedProblem(problem);
+
+        setShowModal(true);
+
+    };
+
+    const handleDelete = async (id) => {
+
+        if (!window.confirm("Delete this problem?"))
+
+            return;
+
+        try {
+
+            await deleteProblem(id);
+
+            loadProblems();
+
+            loadStatistics();
+
+            alert("Problem Deleted");
+
+        }
+
+        catch (error) {
 
             console.error(error);
 
@@ -161,6 +196,10 @@ function Dsa() {
                                         key={problem.id}
 
                                         problem={problem}
+
+                                        onEdit={handleEdit}
+
+                                        onDelete={handleDelete}
 
                                     />
 

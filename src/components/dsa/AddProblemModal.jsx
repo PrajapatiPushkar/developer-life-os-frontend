@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Modal from "react-modal";
-import { createProblem } from "../../services/problemService";
+import { createProblem, updateProblem } from "../../services/problemService";
 
 Modal.setAppElement("#root");
 
@@ -30,13 +30,39 @@ function AddProblemModal({ isOpen, onClose, problem }) {
 
     useEffect(() => {
 
-        if (problem) {
+    if (problem) {
 
-            setFormData(problem);
+        setFormData(problem);
 
-        }
+    }
 
-    }, [problem]);
+    else {
+
+        setFormData({
+
+            title: "",
+
+            platform: "LEETCODE",
+
+            difficulty: "EASY",
+
+            topic: "ARRAYS",
+
+            solved: false,
+
+            problemLink: "",
+
+            solutionLink: "",
+
+            notes: "",
+
+            solvedDate: ""
+
+        });
+
+    }
+
+}, [problem]);
 
     const handleChange = (e) => {
 
@@ -54,27 +80,45 @@ function AddProblemModal({ isOpen, onClose, problem }) {
 
     const handleSubmit = async (e) => {
 
-        e.preventDefault();
+    e.preventDefault();
 
-        try {
+    try {
+
+        if (problem) {
+
+            await updateProblem(
+
+                problem.id,
+
+                formData
+
+            );
+
+            alert("Problem Updated Successfully");
+
+        }
+
+        else {
 
             await createProblem(formData);
 
-            alert("Problem Added Successfully 🎉");
-
-            onClose();
+            alert("Problem Added Successfully");
 
         }
 
-        catch (error) {
+        onClose();
 
-            console.error(error);
+    }
 
-            alert("Failed to Add Problem");
+    catch (error) {
 
-        }
+        console.error(error);
 
-    };
+        alert("Operation Failed");
+
+    }
+
+};
 
     return (
 
@@ -92,9 +136,15 @@ function AddProblemModal({ isOpen, onClose, problem }) {
 
             <h2 className="text-3xl font-bold mb-6">
 
-                Add Problem
+    {problem ?
 
-            </h2>
+        "Update Problem"
+
+        :
+
+        "Add Problem"}
+
+</h2>
 
             <form
 
