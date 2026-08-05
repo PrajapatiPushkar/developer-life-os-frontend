@@ -32,3 +32,31 @@ export const deleteProblem = (id) =>
 
 export const getStatistics = () =>
     API.get("/statistics");
+
+export const filterProblems = (
+    title,
+    difficulty,
+    platform,
+    topic,
+    solved
+) => {
+
+    return API.get("/filter",{
+
+        params:{
+
+            title,
+
+            difficulty,
+
+            platform,
+
+            topic,
+
+            solved
+
+        }
+
+    });
+
+};
