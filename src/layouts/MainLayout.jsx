@@ -1,30 +1,53 @@
+import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import NotificationBell from "../components/notification/NotificationBell";
+
+import NotificationDropdown from "../components/notification/NotificationDropdown";
+
+import { getUnreadNotifications } from "../services/notificationService";
 
 function MainLayout({ children }) {
+  const [notifications, setNotifications] = useState([]);
 
-    return (
+  const [showNotifications, setShowNotifications] = useState(false);
 
-        <div className="bg-slate-950 min-h-screen">
+  const loadNotifications = async () => {
+    try {
+      const response = await getUnreadNotifications();
 
-            <Navbar />
+      setNotifications(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-            <div className="flex">
+  useEffect(() => {
+    loadNotifications();
+  }, []);
 
-                <Sidebar />
+  return (
+    <div className="bg-slate-950 min-h-screen">
+      <Navbar />
 
-                <main className="flex-1 p-8 text-white">
+      <div className="relative">
+        <NotificationBell
+          unreadCount={notifications.length}
+          onClick={() => setShowNotifications(!showNotifications)}
+        />
 
-                    {children}
+        {showNotifications && (
+          <NotificationDropdown notifications={notifications} />
+        )}
+      </div>
 
-                </main>
+      <div className="flex">
+        <Sidebar />
 
-            </div>
-
-        </div>
-
-    );
-
+        <main className="flex-1 p-8 text-white">{children}</main>
+      </div>
+    </div>
+  );
 }
 
 export default MainLayout;
