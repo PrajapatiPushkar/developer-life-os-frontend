@@ -24,4 +24,13 @@ export const getNotifications = () => API.get("");
 
 export const getUnreadNotifications = () => API.get("/unread");
 
+export const markAsRead = (id) =>
+
+    API.put(`/${id}/read`);
+
+
+export const deleteNotification = (id)=>
+
+    API.delete(`/${id}`);
+
 export default API;
