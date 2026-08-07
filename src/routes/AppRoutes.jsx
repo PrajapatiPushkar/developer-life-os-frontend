@@ -1,84 +1,106 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import ProtectedRoute from "../components/ProtectedRoute";
 
+import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
-import Home from "../pages/Home";
-import NotFound from "../pages/NotFound";
 import TaskManager from "../pages/TaskManager";
+import DailyPlanner from "../pages/DailyPlanner";
 import Goals from "../pages/Goals";
 import Dsa from "../pages/Dsa";
 import Internships from "../pages/Internships";
-import DailyPlanner from "../pages/DailyPlanner";
+import NotFound from "../pages/NotFound";
 
 function AppRoutes() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
 
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+    return (
 
-        <Route
-          path="/tasks"
-          element={
-            <ProtectedRoute>
-              <TaskManager />
-            </ProtectedRoute>
-          }
-        />
+        <BrowserRouter>
 
-        <Route
-          path="/planner"
-          element={
-            <ProtectedRoute>
-              <DailyPlanner />
-            </ProtectedRoute>
-          }
-        />
+            <Routes>
 
-        <Route
-          path="/goals"
-          element={
-            <ProtectedRoute>
-              <Goals />
-            </ProtectedRoute>
-          }
-        />
+                <Route
+                    path="/"
+                    element={<Home />}
+                />
 
-        <Route
-          path="/dsa"
-          element={
-            <ProtectedRoute>
-              <Dsa />
-            </ProtectedRoute>
-          }
-        />
+                <Route
+                    path="/login"
+                    element={<Login />}
+                />
 
-        <Route
-          path="/internships"
-          element={
-            <ProtectedRoute>
-              <Internships />
-            </ProtectedRoute>
-          }
-        />
+                <Route
+                    path="/register"
+                    element={<Register />}
+                />
 
-        <Route path="/home" element={<Home />} />
+                <Route
+                    path="/dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <Dashboard />
+                        </ProtectedRoute>
+                    }
+                />
 
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
-  );
+                <Route
+                    path="/tasks"
+                    element={
+                        <ProtectedRoute>
+                            <TaskManager />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/planner"
+                    element={
+                        <ProtectedRoute>
+                            <DailyPlanner />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/goals"
+                    element={
+                        <ProtectedRoute>
+                            <Goals />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/dsa"
+                    element={
+                        <ProtectedRoute>
+                            <Dsa />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/internships"
+                    element={
+                        <ProtectedRoute>
+                            <Internships />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="*"
+                    element={<NotFound />}
+                />
+
+            </Routes>
+
+        </BrowserRouter>
+
+    );
+
 }
 
 export default AppRoutes;

@@ -26,28 +26,50 @@ function MainLayout({ children }) {
     loadNotifications();
   }, []);
 
-  return (
+ return (
+
     <div className="bg-slate-950 min-h-screen">
-      <Navbar />
 
-      <div className="relative">
-        <NotificationBell
-          unreadCount={notifications.length}
-          onClick={() => setShowNotifications(!showNotifications)}
-        />
+        <Navbar />
 
-        {showNotifications && (
-          <NotificationDropdown notifications={notifications} />
-        )}
-      </div>
+        <div className="relative flex justify-end px-8 py-4">
 
-      <div className="flex">
-        <Sidebar />
+            <NotificationBell
+                unreadCount={notifications.length}
+                onClick={() =>
+                    setShowNotifications(!showNotifications)
+                }
+            />
 
-        <main className="flex-1 p-8 text-white">{children}</main>
-      </div>
+            {
+
+                showNotifications && (
+
+                    <NotificationDropdown
+                        notifications={notifications}
+                    />
+
+                )
+
+            }
+
+        </div>
+
+        <div className="flex">
+
+            <Sidebar />
+
+            <main className="flex-1 p-8 text-white">
+
+                {children}
+
+            </main>
+
+        </div>
+
     </div>
-  );
+
+);
 }
 
 export default MainLayout;
