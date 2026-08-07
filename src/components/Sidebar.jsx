@@ -4,17 +4,47 @@ function Sidebar() {
 
     const menuItems = [
 
-        { name: "Dashboard", path: "/dashboard", icon: "🏠" },
+        {
+            name: "Dashboard",
+            path: "/dashboard",
+            icon: "🏠"
+        },
 
-        { name: "Task Manager", path: "/tasks", icon: "📋" },
+        {
+            name: "Task Manager",
+            path: "/tasks",
+            icon: "📋"
+        },
 
-        { name: "Daily Planner", path: "/planner", icon: "📅" },
+        {
+            name: "Daily Planner",
+            path: "/planner",
+            icon: "📅"
+        },
 
-        { name: "Goal Tracker", path: "/goals", icon: "🎯" },
+        {
+            name: "Goal Tracker",
+            path: "/goals",
+            icon: "🎯"
+        },
 
-        { name: "DSA Progress", path: "/dsa", icon: "📚" },
+        {
+            name: "DSA Progress",
+            path: "/dsa",
+            icon: "📚"
+        },
 
-        { name: "Internships", path: "/internships", icon: "💼" }
+        {
+            name: "Internships",
+            path: "/internships",
+            icon: "💼"
+        },
+
+        {
+            name: "Profile",
+            path: "/profile",
+            icon: "👤"
+        }
 
     ];
 
@@ -25,40 +55,54 @@ function Sidebar() {
             <div className="p-6">
 
                 <h2 className="text-2xl font-bold text-cyan-400">
+
                     Menu
+
                 </h2>
 
             </div>
 
             <nav className="mt-6">
 
-                {menuItems.map((item) => (
+                {
 
-                    <NavLink
-                        key={item.path}
-                        to={item.path}
-                        className={({ isActive }) =>
+                    menuItems.map((item) => (
 
-                            `flex items-center gap-3 px-6 py-4 transition
+                        <NavLink
+                            key={item.path}
+                            to={item.path}
+                            className={({ isActive }) =>
 
-                            ${isActive
+                                `flex items-center gap-3 px-6 py-4 transition
 
-                                ? "bg-cyan-500 text-white"
+                                ${isActive
 
-                                : "hover:bg-slate-800"
+                                    ? "bg-cyan-500 text-white"
 
-                            }`
+                                    : "hover:bg-slate-800"
 
-                        }
-                    >
+                                }`
 
-                        <span>{item.icon}</span>
+                            }
+                        >
 
-                        <span>{item.name}</span>
+                            <span className="text-xl">
 
-                    </NavLink>
+                                {item.icon}
 
-                ))}
+                            </span>
+
+                            <span>
+
+                                {item.name}
+
+                            </span>
+
+                        </NavLink>
+
+                    ))
+
+                }
 
             </nav>
 

@@ -5,6 +5,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import Profile from "../pages/Profile";
 import Dashboard from "../pages/Dashboard";
 import TaskManager from "../pages/TaskManager";
 import DailyPlanner from "../pages/DailyPlanner";
@@ -34,6 +35,21 @@ function AppRoutes() {
                 <Route
                     path="/register"
                     element={<Register />}
+                />
+
+                <Route
+                  path="/profile"
+
+                  element={
+
+                    <ProtectedRoute>
+
+                      <Profile />
+
+                    </ProtectedRoute>
+
+                  }
+
                 />
 
                 <Route
