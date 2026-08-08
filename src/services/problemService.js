@@ -1,63 +1,47 @@
-import axios from "axios";
+import API from "./api";
 
-const API = axios.create({
+const BASE_URL = "/api/problems";
 
-    baseURL: "http://localhost:8080/api/problems"
-
-});
-
-API.interceptors.request.use((config) => {
-
-    const token = localStorage.getItem("token");
-
-    if (token) {
-
-        config.headers.Authorization = `Bearer ${token}`;
-
-    }
-
-    return config;
-
-});
-
-export const getAllProblems = () => API.get("");
-
-export const createProblem = (problem) => API.post("", problem);
-
-export const updateProblem = (id, problem) =>
-    API.put(`/${id}`, problem);
-
-export const deleteProblem = (id) =>
-    API.delete(`/${id}`);
-
-export const getStatistics = () =>
-    API.get("/statistics");
-
-export const filterProblems = (
-    title,
-    difficulty,
-    platform,
-    topic,
-    solved
-) => {
-
-    return API.get("/filter",{
-
-        params:{
-
-            title,
-
-            difficulty,
-
-            platform,
-
-            topic,
-
-            solved
-
-        }
-
-    });
-
+// Get All Problems
+export const getAllProblems = () => {
+  return API.get(BASE_URL);
 };
 
+// Create Problem
+export const createProblem = (problem) => {
+  return API.post(BASE_URL, problem);
+};
+
+// Update Problem
+export const updateProblem = (id, problem) => {
+  return API.put(`${BASE_URL}/${id}`, problem);
+};
+
+// Delete Problem
+export const deleteProblem = (id) => {
+  return API.delete(`${BASE_URL}/${id}`);
+};
+
+// Get Problem Statistics
+export const getStatistics = () => {
+  return API.get(`${BASE_URL}/statistics`);
+};
+
+// Filter Problems
+export const filterProblems = (
+  title,
+  difficulty,
+  platform,
+  topic,
+  solved
+) => {
+  return API.get(`${BASE_URL}/filter`, {
+    params: {
+      title,
+      difficulty,
+      platform,
+      topic,
+      solved,
+    },
+  });
+};

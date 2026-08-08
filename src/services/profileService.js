@@ -1,27 +1,15 @@
-import axios from "axios";
+import API from "./api";
 
-const API = axios.create({
+const BASE_URL = "/api/profile";
 
-    baseURL: "http://localhost:8080/api/profile"
+// Get Current User Profile
+export const getProfile = () => {
+  return API.get(BASE_URL);
+};
 
-});
-
-API.interceptors.request.use((config) => {
-
-    const token = localStorage.getItem("token");
-
-    if (token) {
-
-        config.headers.Authorization = `Bearer ${token}`;
-
-    }
-
-    return config;
-
-});
-
-export const getProfile = () => API.get("");
-
-export const updateProfile = (data) => API.put("", data);
+// Update Current User Profile
+export const updateProfile = (data) => {
+  return API.put(BASE_URL, data);
+};
 
 export default API;

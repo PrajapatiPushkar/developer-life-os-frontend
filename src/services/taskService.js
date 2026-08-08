@@ -1,93 +1,126 @@
-import axios from "axios";
+import API from "./api";
 
-const API = axios.create({
-    baseURL: "http://localhost:8080/api/tasks"
-});
+const TASK_API = "/api/tasks";
 
-// Automatically attach JWT token
-API.interceptors.request.use((config) => {
-
-    const token = localStorage.getItem("token");
-
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-
-    return config;
-});
-
+// ==========================
 // GET ALL TASKS
+// ==========================
+
 export const getAllTasks = (
-    page = 0,
-    size = 5,
-    sortBy = "id",
-    direction = "asc"
+  page = 0,
+  size = 5,
+  sortBy = "id",
+  direction = "asc"
+) => {
+  return API.get(TASK_API, {
+    params: {
+      page,
+      size,
+      sort: `${sortBy},${direction}`,
+    },
+  });
+};
+
+
+// ==========================
+// GET TASKS
+// ==========================
+
+export const getTasks = () => {
+  return API.get(TASK_API);
+};
+
+
+// ==========================
+// CREATE TASK
+// ==========================
+
+export const createTask = (taskData) => {
+  return API.post(TASK_API, taskData);
+};
+
+
+// ==========================
+// GET TASK BY ID
+// ==========================
+
+export const getTaskById = (id) => {
+  return API.get(`${TASK_API}/${id}`);
+};
+
+
+// ==========================
+// UPDATE TASK
+// ==========================
+
+export const updateTask = (id, taskData) => {
+  return API.put(`${TASK_API}/${id}`, taskData);
+};
+
+
+// ==========================
+// DELETE TASK
+// ==========================
+
+export const deleteTask = (id) => {
+  return API.delete(`${TASK_API}/${id}`);
+};
+
+
+// ==========================
+// SEARCH TASKS
+// ==========================
+
+export const searchTasks = (keyword) => {
+  return API.get(`${TASK_API}/search`, {
+    params: {
+      keyword,
+    },
+  });
+};
+
+
+// ==========================
+// FILTER TASKS
+// ==========================
+
+export const filterTasks = (
+  priority,
+  status
 ) => {
 
-    return API.get(
+  const params = {};
 
-        `?page=${page}&size=${size}&sort=${sortBy},${direction}`
+  if (priority && priority !== "ALL") {
+    params.priority = priority;
+  }
 
-    );
+  if (status && status !== "ALL") {
+    params.status = status;
+  }
 
+  return API.get(`${TASK_API}/filter`, {
+    params,
+  });
 };
 
-// CREATE TASK
-export const createTask = (taskData) => {
-    return API.post("", taskData);
-};
-
-// GET TASK BY ID
-export const getTaskById = (id) => {
-    return API.get(`/${id}`);
-};
-
-// UPDATE TASK
-export const updateTask = (id, taskData) => {
-    return API.put(`/${id}`, taskData);
-};
-
-// DELETE TASK
-export const deleteTask = (id) => {
-    return API.delete(`/${id}`);
-};
-
-// SEARCH TASKS
-export const searchTasks = (keyword) => {
-    return API.get(`/search?keyword=${keyword}`);
-};
-
-// FILTER TASKS
-export const filterTasks = (priority, status) => {
-
-    let url = "/filter?";
-
-    if (priority && priority !== "ALL") {
-        url += `priority=${priority}&`;
-    }
-
-    if (status && status !== "ALL") {
-        url += `status=${status}&`;
-    }
-
-    return API.get(url);
-
-};
 
 // ==========================
 // DASHBOARD SUMMARY
 // ==========================
+
 export const getDashboardSummary = () => {
-
-    return API.get("/dashboard");
-
+  return API.get(`${TASK_API}/dashboard`);
 };
 
-// Upcoming task
+
+// ==========================
+// UPCOMING TASKS
+// ==========================
+
 export const getUpcomingTasks = () => {
-
-    return API.get("/upcoming");
-
+  return API.get(`${TASK_API}/upcoming`);
 };
+
 
 export default API;

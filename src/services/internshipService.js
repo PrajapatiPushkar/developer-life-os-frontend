@@ -1,36 +1,23 @@
-import axios from "axios";
+import API from "./api";
 
-const API = axios.create({
+const BASE_URL = "/api/internships";
 
-    baseURL: "http://localhost:8080/api/internships"
+// Get All Internships
+export const getAllInternships = () =>
+  API.get(BASE_URL);
 
-});
-
-API.interceptors.request.use((config) => {
-
-    const token = localStorage.getItem("token");
-
-    if (token) {
-
-        config.headers.Authorization = `Bearer ${token}`;
-
-    }
-
-    return config;
-
-});
-
-export const getAllInternships = () => API.get("");
-
+// Create Internship
 export const createInternship = (internship) =>
-    API.post("", internship);
+  API.post(BASE_URL, internship);
 
+// Update Internship
 export const updateInternship = (id, internship) =>
-    API.put(`/${id}`, internship);
+  API.put(`${BASE_URL}/${id}`, internship);
 
+// Delete Internship
 export const deleteInternship = (id) =>
-    API.delete(`/${id}`);
+  API.delete(`${BASE_URL}/${id}`);
 
+// Get Internship Statistics
 export const getStatistics = () =>
-
-    API.get("/statistics");
+  API.get(`${BASE_URL}/statistics`);

@@ -1,39 +1,50 @@
-import axios from "axios";
+import API from "./api";
 
-const API = axios.create({
+const GOAL_API = "/api/goals";
 
-    baseURL:"http://localhost:8080/api/goals"
+// ==========================
+// GET ALL GOALS
+// ==========================
 
-});
+export const getAllGoals = () => {
+  return API.get(GOAL_API);
+};
 
-API.interceptors.request.use((config)=>{
 
-    const token = localStorage.getItem("token");
+// ==========================
+// CREATE GOAL
+// ==========================
 
-    if(token){
+export const createGoal = (goal) => {
+  return API.post(GOAL_API, goal);
+};
 
-        config.headers.Authorization = `Bearer ${token}`;
 
-    }
-
-    return config;
-
-});
-
-export const getAllGoals=()=>API.get("");
-
-export const createGoal=(goal)=>API.post("",goal);
+// ==========================
+// UPDATE GOAL
+// ==========================
 
 export const updateGoal = (id, goal) => {
-    return API.put(`/${id}`, goal);
+  return API.put(`${GOAL_API}/${id}`, goal);
 };
+
+
+// ==========================
+// DELETE GOAL
+// ==========================
 
 export const deleteGoal = (id) => {
-    return API.delete(`/${id}`);
+  return API.delete(`${GOAL_API}/${id}`);
 };
 
-export const getGoalStatistics = () =>
 
-    API.get("/statistics");
+// ==========================
+// GOAL STATISTICS
+// ==========================
+
+export const getGoalStatistics = () => {
+  return API.get(`${GOAL_API}/statistics`);
+};
+
 
 export default API;
